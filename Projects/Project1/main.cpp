@@ -1,0 +1,19 @@
+// zion_solution.cpp
+//
+#include <iostream>
+#include "Arena.h"
+#include "globals.h"
+#include "Previous.h"
+#include "Robot.h"
+#include "Game.h"
+#include "Player.h"
+
+
+///////////////////////////////////////////////////////////////////////////
+//  main()
+///////////////////////////////////////////////////////////////////////////
+
+int main()
+{
+    return 0;
+}
