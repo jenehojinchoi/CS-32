@@ -1,0 +1,623 @@
+﻿CS 32 Project 2  805347855 Hojin Choi
+
+
+A description of the design of your implementation and why you chose it. (A couple of sentences will probably suffice, perhaps with a picture of a typical List and an empty List. Is your list circular? Does it have a dummy node? What's in your nodes?)
+
+
+OnlineDating is a doubly-linked list to fulfill the requirements on the project spec. However, I thought there was no need for each node to contain information about the previous node since the spec did not ask us to do a reversal (like reverseList in homework 1).
+
+
+My doubly-linked list implementation was not a circular node. The initial and last nodes are pointed by a head pointer. The nodes have a value of type OnlineType, firstName and lastName in string, and pointers to previous node and next node. 
+
+
+
+
+A brief description of notable obstacles you overcame.
+
+
+The most difficult part for me was to implement makeMatch(). It seemed easy, but it turned out to be an issue because it had to do with adding in the front and back of a specific node. Also, before testing it out in the main function, I was not able to come up with edge cases, such as when the previous or next node of a current node is a null pointer. 
+
+
+Even after I thought my code would run, it took a long time for me to actually come up with makeMatch() that would run correctly. It was hard to find logic for a condition when incoming firstName (or lastname) was smaller than current firstName (or lastName). It was important to set a new node as a previous node of the current node to store all previous and next node.
+
+
+I also had a difficulty implementing mergeMatches(), since it had to deal with a lot of loops. I was worried if calling functions already declared above will result in too long run time. However, I could not come up with any better idea, so I had to do deal with some nested loops and use those functions. I first found if the resulting boolean will be true or false by looping through both lists and finding if they have the same full name and same or different value.
+
+
+
+
+Pseudocode for non-trivial algorithms (e.g., OnlineDating::blockPreviousMatch and mergeMatches)
+
+
+int OnlineDating::howManyMatches()
+{
+        Set curr, set int matches as 0.
+        Loop through the list using curr
+                Set curr point to next node
+                Increment matches
+        When curr is a null pointer (out of the linked list), return matches
+}
+
+
+
+
+bool OnlineDating::makeOrTransform(const std::string& firstName, const std::string& lastName, const OnlineType& value)
+{
+        if there is the full name in the list
+                node's data with the full name = value
+        else 
+                add extra node with the full name and value
+}
+
+
+
+
+bool OnlineDating::blockPreviousMatch(const std::string& firstName, const std::string& lastName)
+{
+        Loop through the list
+                if firstname and lastname are the same;
+                        if curr->prev == nullptr and curr->next != nullptr
+                                set head as curr->next
+                                set curr->next->prev as nullptr (removed)
+
+
+                        else if curr->prev == nullptr and curr->next != nullptr
+                                set curr->prev->next as nullptr (removed)
+
+
+                        else if curr->next != nullptr and curr->prev != nullptr
+                                remove the node
+
+
+                        else ( this case means head had only one node with the fullname)
+                                set head as nullptr;         
+                delete curr; // release memory
+                return true
+        
+// out of the loop
+return false 
+}
+
+
+bool OnlineDating::makeMatch(const std::string& firstName, const std::string & lastName, const OnlineType& value)
+{
+1) If head is null
+make head a new node that contains incoming firstName, lastName, and value 
+
+
+2) Else Loop through the list 
+        1) If last name is the same
+                i) If firstname is the same
+                        return false
+                ii) If firstname is larger than current 
+                        newNode should be previous node of current
+
+
+                        if newNode is not a null pointer        
+                                set newNode's next node as a current node
+                                return true
+                        if newNode is a null pointer 
+                                set head as previous node of current
+                                return true
+
+
+                iii) If firstname is smaller than current and next node of current is a null pointer
+                        newNode's previous = curr
+newNode's next = nullptr        
+return true
+ 
+        2) If last name is larget than current = similar to (i)
+return true
+        3) If last name is smaller than current and next node of current is a null pointer = similar to (iii)
+return true
+
+
+return false // the case should not be here, but I added in case there is an edge case
+}
+
+
+
+
+bool OnlineDating::someoneAmongMatches(const std::string& firstName, const std::string& lastName) const
+{
+        Loop through the list 
+                If firstName and lastName are the same, return true
+                If not, move on
+        return false if there was no fullname on the list
+}
+
+
+bool mergeMatches(const OnlineDating & odOne, const OnlineDating & odTwo, OnlineDating & odJoined)
+{
+        check for base case when odOne or odTwo are null
+                odJoined = not null linked list among odOne and odTwo
+                return true
+
+
+        if odOne and odTwo are not null
+        loop through odOne and odTwo to 
+if there are same fullname with different value
+        result = false
+otherwise result = true
+
+
+if result = true, odJoined = odOne (deep copy)
+        Loop through odTwo and merge the two lists
+
+
+if result = false, odJoined = empty OnlineDating
+        Loop through odTwo and add everything except same full name 
+        Loop through odOne and add everything except same fullname
+
+
+return result
+}
+
+
+
+
+void authenticateMatches (const std::string& fsearch, const std::string& lsearch, const OnlineDating& odOne, OnlineDating& odResult) 
+{
+        odResult = odOne (deep copy)
+
+
+        Loop through odOne by using int i & take odOne's firstName, lastName, and value
+                if fsearch == "*" and lsearch == "*"
+                        return; // do nothing
+                else if fsearch != "*" and lsearch == "*"
+                        if firstName != fsearch 
+                                remove it from odResult
+                        else 
+                                do nothing
+                else if lsearch != "*" and fsearch == "*"
+                        if lastName != lsearch 
+                                remove it from odResult
+                        else 
+                                do nothing
+                else  // search for a specific name
+                        if  firstName != fsearch and lastName != lsearch
+                                remove if from odResult
+                        else
+                                do nothing
+}
+
+
+
+
+A list of test cases that would thoroughly test the functions. Be sure to indicate the purpose of the tests. For example, here's the beginning of a presentation in the form of code:
+
+
+
+
+I tested my code with OnlineType int. I also made main() to thoroughly test my function.
+
+
+
+
+
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// my own testing for report
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+void myTest1() {
+    OnlineDating hello;
+    hello.makeMatch("Bbb", "Choi", 3);
+    hello.makeMatch("Aaa", "Choi", 1);
+    hello.makeMatch("Ccc", "Choi", 4);
+    hello.makeMatch("Abb", "Choi", 2);
+
+
+    assert(hello.howManyMatches() == 4);                        // how many matches
+    assert(!hello.makeMatch("Abb", "Choi", 2));                 // false
+    assert(!hello.transformMatch("Acc", "Choi", 3));           // false
+    assert(hello.transformMatch("Abb", "Choi", 10));           // true, now Abb, Choi, 10
+    assert(hello.makeOrTransform("Ccc", "Choi", 5));          // true, now Ccc, Choi, 5
+    assert(hello.makeOrTransform("Ddd", "Choi", 4));           // true, add Ddd, Choi, 4
+    assert(hello.blockPreviousMatch("Abb", "Choi"));            // true, remove Abb, Choi, 10
+    assert(!hello.someoneAmongMatches("Abb", "Choi"));  // false
+    assert(!hello.blockPreviousMatch("Hello", "CS32"));         // return false;
+    assert(hello.someoneAmongMatches("Aaa", "Choi"));   // true
+
+
+    OnlineType data;
+    data = 0;
+    assert(hello.lookAtMatches("Aaa", "Choi", data) && data==1);        // data changes from 0 to 1
+    OnlineType dataa = 0;
+    assert(!hello.lookAtMatches("Abb", "Choi", dataa) && dataa==0); // dataa remains the same
+}
+
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// Test makeMatch()
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+void testMakeMatch() {
+    OnlineDating hello;
+    assert(hello.makeMatch("Bbb", "Choi", 3));
+    assert(hello.makeMatch("Aaa", "Choi", 1));
+    assert(hello.makeMatch("Ccc", "Choi", 4));
+    assert(hello.makeMatch("Abb", "Choi", 2));
+
+
+    assert(!hello.makeMatch("Abb", "Choi", 2)); // false since it already has the name
+    assert(!hello.makeMatch("Abb", "Choi", 3)); // false since it already has the name with different value
+}
+
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// Test TransformMatch()
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+void testTransformMatch() {
+    OnlineDating hello;
+    hello.makeMatch("A", "A", 1);
+    hello.makeMatch("C", "A", 1);
+    hello.makeMatch("B", "A", 1);
+    hello.makeMatch("B", "C", 1);
+
+
+    assert(hello.transformMatch("A", "A", 1));
+    assert(hello.transformMatch("C", "A", 3));
+    assert(!hello.transformMatch("", "", 3));                 // false since there is no name
+
+
+
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// Test makeOrTransform()
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+void testMakeOrTransform() {
+    OnlineDating hello;
+    hello.makeMatch("A", "A", 1);
+    hello.makeMatch("C", "A", 1);
+    hello.makeMatch("B", "A", 1);
+    hello.makeMatch("B", "C", 1);
+
+
+    assert(hello.makeOrTransform("A", "A", 1));                // does nothing but true
+    assert(hello.makeOrTransform("A", "B", 1));                // will add extra node
+    assert(hello.makeOrTransform("C", "A", 3));                //  changes value from 1 to 3
+    assert(hello.makeOrTransform("", "", 3));                 // false
+}
+
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// Test blockPreviousMatch()
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+void testBlockPreviousMatch() {
+    OnlineDating hello;
+    hello.makeMatch("A", "A", 1);
+    hello.makeMatch("C", "A", 1);
+    hello.makeMatch("B", "A", 1);
+    hello.makeMatch("B", "C", 1);
+
+
+    assert(hello.blockPreviousMatch("A", "A"));
+    assert(hello.blockPreviousMatch("C", "A"));        
+    assert(!hello.blockPreviousMatch("", ""));                 // there is no such name in the list
+    assert(!hello.someoneAmongMatches("A", "A"));         // make sure the name is deleted.
+
+
+    // empty list
+    OnlineDating hi;
+    assert(!hi.blockPreviousMatch("A", "A"));
+}
+
+
+
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// Test someoneAmongMatches()
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+void testSomeoneAmongMatches() {
+    OnlineDating hello;
+    hello.makeMatch("A", "A", 1);
+    hello.makeMatch("C", "A", 1);
+    hello.makeMatch("B", "A", 1);
+    hello.makeMatch("B", "C", 1);
+
+
+    assert(hello.someoneAmongMatches("A", "A"));
+    assert(hello.someoneAmongMatches("C", "A"));
+    assert(!hello.someoneAmongMatches("", ""));                 // false
+
+
+    // empty list
+    OnlineDating hi;
+    assert(!hi.someoneAmongMatches("A", "A"));                 // false because it's an empty list
+}
+
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// Test lookAtMatches()
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+void testLookAtMatches() {
+    OnlineDating hello;
+    hello.makeMatch("A", "A", 1);
+    hello.makeMatch("C", "A", 1);
+    hello.makeMatch("B", "A", 1);
+    hello.makeMatch("B", "C", 1);
+
+
+    int a = 0;
+    assert(hello.lookAtMatches("A", "A", a) && a == 1);
+    int b = 0;
+    assert(hello.lookAtMatches("B", "A", b) && b == 1);
+    int c = 0;
+    assert(!hello.lookAtMatches("D", "A", c) && c == 0);                // false since there is no "D", "A"
+                                                                // c does not change
+
+
+    // empty list
+    OnlineDating hi;
+    int i = 0;
+    assert(!hi.lookAtMatches("A", "A", i) && i == 0);                // test with empty list, false 
+// and no change in i
+}
+
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// Test confirmMatch()
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+void testConfirmMatch() {
+    OnlineDating hello;
+    hello.makeMatch("A", "A", 1);
+    hello.makeMatch("C", "A", 1);
+    hello.makeMatch("B", "A", 1);
+    hello.makeMatch("B", "C", 1);
+
+
+    int i = 0;
+    string f;
+    string l;
+    OnlineType v;
+    assert(hello.confirmMatch(i, f, l, v) && f == "A" && l == "A" && v == 1);        
+
+
+    i = 7;
+    assert(!hello.confirmMatch(i, f, l, v)); // false                // i is out of range
+
+
+
+
+    // Testing empty list
+    OnlineDating hi;
+    int j = 0;
+    string fn = "f";
+    string ln = "l";
+    OnlineType vn = 0;
+    assert(!hi.confirmMatch(j, fn, ln, vn) && fn == "f" && ln == "l" && vn == 0);
+        // nothing changes since confirmMatch was false
+}
+
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// Test tradeMatches()
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+void testTradeMatches() {
+    OnlineDating hello;
+    hello.makeMatch("A", "A", 1);
+    hello.makeMatch("C", "A", 1);
+
+
+    OnlineDating hi;
+    hi.makeMatch("B", "A", 1);
+    hi.makeMatch("B", "C", 1);
+
+
+    hi.tradeMatches(hello);                                // now hi and hello are swapped
+    assert(hi.someoneAmongMatches("A", "A"));
+    assert(hi.someoneAmongMatches("C", "A"));
+    assert(hello.someoneAmongMatches("B", "A"));
+    assert(hello.someoneAmongMatches("B", "C"));
+
+
+    // trade hi with empty linked list
+    OnlineDating empty;
+    hi.tradeMatches(empty);
+    assert(empty.someoneAmongMatches("A", "A"));        // now empty is not empty
+    assert(hi.noMatches());                                // hi is empty
+    assert(!hi.someoneAmongMatches("A", "A"));                
+}
+
+
+
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// Test mergeMatches()
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+void testMergeMatches() {
+    OnlineDating hello;
+    hello.makeMatch("A", "A", 1);
+    hello.makeMatch("C", "A", 1);
+
+
+    OnlineDating hi;
+    hi.makeMatch("A", "A", 1);
+    hi.makeMatch("B", "C", 2);
+
+
+    OnlineDating odj;
+    odj.makeMatch("C", "D", 0);
+    assert(mergeMatches(hello, hi, odj));
+    assert(odj.someoneAmongMatches("A", "A"));
+    assert(odj.someoneAmongMatches("C", "A"));
+    assert(odj.someoneAmongMatches("B", "C"));
+
+
+    // one empty
+    OnlineDating a;
+    assert(mergeMatches(a, hello, odj));                 // odj becomes hello by merging hello and empty list
+
+
+    // two empty lists
+    OnlineDating b;
+    OnlineDating c;
+    c.makeMatch("", "", 0);
+    assert(mergeMatches(a, b, c) && c.noMatches());
+
+
+    // test with false cases
+    a.makeMatch("A", "A", 1);
+    a.makeMatch("C", "A", 1);
+
+
+    b.makeMatch("A", "A", 3);
+    b.makeMatch("B", "C", 2);
+
+
+    OnlineDating o;
+    assert(!mergeMatches(a, b, o));                // false since "A", "A" has a different value
+    assert(o.someoneAmongMatches("C", "A") && o.someoneAmongMatches("B", "C"));         
+ //  o will have "C", "A", 1 and "B", "C", 2
+    assert(!o.someoneAmongMatches("A", "A"));
+}
+
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// Test authenticateMatches()
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+void testAuthenticateMatches() {
+    OnlineDating a;
+    a.makeMatch("A", "A", 1);
+    a.makeMatch("C", "A", 1);
+    a.makeMatch("A", "C", 1);
+
+
+    OnlineDating odr;
+    odr.makeMatch("C", "D", 0);                                // test with non empty odr
+
+
+    // l == "*"                                                
+    authenticateMatches("A", "*", a, odr);                        // find node with firstname "A"
+    assert(odr.someoneAmongMatches("A", "A"));                        
+    assert(!odr.someoneAmongMatches("C", "A"));         // false
+    assert(odr.howManyMatches()==2);
+
+
+    // f == "*"
+    authenticateMatches("*", "C", a, odr);                        // find node with lastname "C"
+    assert(odr.someoneAmongMatches("A", "C"));
+    assert(!odr.someoneAmongMatches("A", "A"));         // false
+    assert(odr.howManyMatches()==1);
+
+
+    // l != "*" && f != "*"                                        // odr has nodes that equal the full name
+    authenticateMatches("A", "C", a, odr);
+    assert(odr.someoneAmongMatches("A", "C"));
+    assert(!odr.someoneAmongMatches("A", "A"));         // false, has only "A", "C"
+    assert(odr.howManyMatches()==1);
+
+
+    // l == "*" && f == "*"
+    authenticateMatches("*", "*", a, odr);                        // basically there is no filter, odr = a
+    assert(odr.someoneAmongMatches("A", "C"));
+    assert(odr.someoneAmongMatches("A", "A"));
+    assert(odr.someoneAmongMatches("A", "C"));
+    assert(odr.howManyMatches()==3);
+
+
+    // test with empty list
+    OnlineDating empty;
+    OnlineDating r;
+    authenticateMatches("*", "*", empty, r);        
+    assert(r.noMatches());                                // empty list has nothing 
+
+
+    // test with "", ""
+    int i;
+    empty.makeMatch("", "", i);
+    authenticateMatches("*", "*", empty, r);
+    assert(!r.noMatches());                        // since r will have "", "", i, it will have one node
+    assert(r.howManyMatches()==1);
+}
+
+
+int main() {
+    // testInString();
+    // cout << "Test in string passed" << "\n";
+    int a;
+    std::cout << "===========================================" << "\n";
+    std::cout << "Enter number from 1 to 14: ";
+    std::cin >> a;
+    std::cout << "===========================================" << "\n";
+    switch (a){
+        case 1:
+            projectSpecTest1();
+            std::cout << "projectSpecTest1 passed" << "\n";
+            break;
+        case 2:
+            projectSpecTest2();
+            std::cout << "projectSpecTest2 passed" << "\n";
+            break;
+        case 3:
+            projectSpecTest3();
+            std::cout << "projectSpecTest3 passed" << "\n";
+            break;
+        case 4:
+            myTest1();
+            std::cout << "myTest1 passed" << "\n";
+            break;
+        case 5:
+            testMakeMatch();
+            std::cout << "testMakeMatch passed" << "\n";
+            break;
+        case 6:
+            testTransformMatch();
+            std::cout << "testTransformMatch passed" << "\n";
+            break;
+        case 7:
+            testMakeOrTransform();
+            std::cout << "testMakeOrTransform passed" << "\n";
+            break;
+        case 8:
+            testBlockPreviousMatch();
+            std::cout << "testBlockPreviousMatch passed" << "\n";
+            break;
+        case 9:
+            testSomeoneAmongMatches();
+            std::cout << "testSomeoneAmongMatches passed" << "\n";
+            break;
+        case 10:
+            testLookAtMatches();
+            std::cout << "testLookAtMatches passed" << "\n";
+            break;
+        case 11:
+            testConfirmMatch();
+            std::cout << "testConfirmMatch passed" << "\n";
+            break;
+        case 12:
+            testTradeMatches();
+            std::cout << "testTradeMatches passed" << "\n";
+            break;
+        case 13:
+            testMergeMatches();
+            std::cout << "testMergeMatches passed" << "\n";
+            break;
+        case 14:
+            testAuthenticateMatches();
+            std::cout << "testAuthenticateMatches passed" << "\n";
+            break;
+    }
+    return 0;
+}
