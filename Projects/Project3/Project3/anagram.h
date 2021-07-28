@@ -1,0 +1,46 @@
+//
+//  anagram.h
+//  Project3
+//
+//  Created by Jene Hojin Choi on 2021/07/28.
+//
+
+#ifndef anagram_h
+#define anagram_h
+
+#include <iostream>
+#include <fstream>
+#include <istream>
+#include <string>
+
+const int MAXRESULTS = 20;    // Max matches that can be found
+const int MAXDICTWORDS = 30000; // Max words that can be read in
+
+using namespace std;
+//Puts each string in dictfile into the array dict. Returns the number of words
+//read into dict. This number should not be larger than MAXDICTWORDS since that is
+//the size of the array.
+int makeDictionary(istream &dictfile, string dict[]);
+
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+// returns index if word contains a char
+int indexOfChar(string dictWord, char c, int i);
+
+// isAnagram function
+bool isAnagram(string word, string dictWord);
+
+// find empty index in results array
+int findEmpty(string results[]);
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+//Puts all the possibilities of word which are found in dict into results. Returns
+//the number of matched words found. This number should not be larger than
+//MAXRESULTS since that is the size of the array. The size is the number of words
+int shuffleChars(string word, const string dict[], int size, string results[]);
+
+void revealOutcomes(const string results[], int size);
+
+#endif /* anagram_h */
