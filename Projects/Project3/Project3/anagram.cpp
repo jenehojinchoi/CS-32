@@ -5,13 +5,15 @@
 //  Created by Jene Hojin Choi on 2021/07/27.
 //
 
-#include "anagram.h"
 #include <iostream>
 #include <fstream>
 #include <istream>
 #include <string>
 
 using namespace std;
+
+const int MAXRESULTS = 20;    // Max matches that can be found
+const int MAXDICTWORDS = 30000; // Max words that can be read in
 
 //Puts each string in dictfile into the array dict. Returns the number of words
 //read into dict. This number should not be larger than MAXDICTWORDS since that is
@@ -21,16 +23,17 @@ int makeDictionary(istream &dictfile, string dict[])
     if (MAXDICTWORDS <= 0) return 0;
     
     string str;
-    if (dictfile >> str)
+    if (getline(dictfile, str)) // getline is better than >>
+        // string hypens- malfunctions
     {
-        // count 안 쓰고 못 만드나?
-        int count = 1+makeDictionary(dictfile, dict);
-        if (count <= MAXDICTWORDS) // count가 maxdictwords 보다 작으면
+        // can i make it without declaring count...?
+        int count = makeDictionary(dictfile, dict) + 1;
+        if (count <= MAXDICTWORDS) // count is smaller than maxdictwords
         {
-            dict[count-1] = str;    // dict에 str 등록
+            dict[count-1] = str;    // make str in dict with index
             return count;
         }
-        else return MAXDICTWORDS; // count가 maxdictwords 보다 크면
+        else return MAXDICTWORDS; // count is larger than maxdictwords
     }
     else return 0;
 }
@@ -39,7 +42,7 @@ int makeDictionary(istream &dictfile, string dict[])
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 // returns index if word contains a char
-int indexOfChar(string dictWord, char c, int i)
+int indexOfChar(string &dictWord, char c, int i)
 {
     if (i > dictWord.length() || dictWord.length() == 0) return -1;
     if (c == dictWord[i]) return i;
@@ -48,7 +51,7 @@ int indexOfChar(string dictWord, char c, int i)
 
 
 // isAnagram function
-bool isAnagram(string word, string dictWord)
+bool isAnagram(string &word, string &dictWord)
 {
     if (word.length() == 0 && dictWord.length() == 0) return true;
     if (word.length() != dictWord.length()) return false;
@@ -71,25 +74,43 @@ int findEmpty(string results[])
         return 0;
     return findEmpty(results+1) + 1;
 }
+
+
+// find if a word is already in results array
+bool containsWord(string &dictWord, string results[])
+{
+    if (!results || results[0] == "")
+        return false;
+    if (results[0] == dictWord)
+        return true;
+    else return containsWord(dictWord, results+1);
+}
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 //Puts all the possibilities of word which are found in dict into results. Returns
 //the number of matched words found. This number should not be larger than
 //MAXRESULTS since that is the size of the array. The size is the number of words
-int shuffleChars(string word, const string dict[], int size, string results[])
+
+int shuffleChars2(string &word, const string dict[], int size, string results[])
 {
     if (size == 0 || word.length()==0)
         return findEmpty(results);
     else {
-        if (isAnagram(word, dict[0])) {
+        string dictWord = dict[0];
+        if (isAnagram(word, dictWord)) {
             int emptyIndex = findEmpty(results);
-            if (emptyIndex < MAXRESULTS) { 
-                results[emptyIndex] = dict[0];
+            if (emptyIndex < MAXRESULTS && !containsWord(dictWord, results)) {
+                results[emptyIndex] = dictWord;
             }
         }
-        return shuffleChars(word, dict+1, size-1, results);
+        return shuffleChars2(word, dict+1, size-1, results);
     }
+}
+
+int shuffleChars(string word, const string dict[], int size, string results[])
+{
+    return shuffleChars2(word, dict, size, results);
 }
 
 
@@ -104,13 +125,13 @@ void revealOutcomes(const string results[], int size)
     }
 }
 
-
+//
 //int main()
 //{
 //    string results[MAXRESULTS];
 //    string dict[MAXDICTWORDS];
-//    ifstream dictfile;         // file containing the list of words
-//    int nwords;                // number of words read from dictionary
+//    ifstream dictfile;
+//    int nwords;
 //    string word;
 //
 //    dictfile.open("words.txt");
@@ -120,7 +141,6 @@ void revealOutcomes(const string results[], int size)
 //    }
 //
 //    nwords = makeDictionary(dictfile, dict);
-//    cout << "NWORDS: " << nwords << "\n\n";
 //
 //    cout << "Please enter a string for an anagram: ";
 //    cin >> word;

@@ -21,8 +21,8 @@ void testMakeDictionary()
 
     dictfile.open("words.txt");
     nwords = makeDictionary(dictfile, dict);
-    
-    assert(nwords==25144);
+
+    assert(nwords==25147);
     assert(dict[0]=="zygote");
 }
 
@@ -38,36 +38,37 @@ void testShuffleChars()
     nwords = makeDictionary(dictfile, dict);
 
     assert(shuffleChars("apt", dict, nwords, results)==3);
-    
+
     string results2[MAXRESULTS];
     assert(shuffleChars("cat", dict, nwords, results2)==2);
-    
+
     string results3[MAXRESULTS];
     assert(shuffleChars("AAA", dict, nwords, results3)==1);
-    
+
     string results4[MAXRESULTS];
     assert(shuffleChars("abovementioned", dict, nwords, results4)==1);
-    
+
     // empty string
     string results5[MAXRESULTS];
     assert(shuffleChars("", dict, nwords, results5)==0);
-    
+
     // no results
     string results6[MAXRESULTS];
     assert(shuffleChars("abcdefghijklmnop", dict, nwords, results6)==0);
 }
 
+
 void testIsAnagram()
 {
     assert(isAnagram("cat", "tac"));
     assert(isAnagram("abet", "bate"));
-    
+
     // word.length different
     assert(!isAnagram("abcde", "abcd"));
-    
+
     // case sensitive
     assert(!isAnagram("ABC", "ABc"));
-    
+
     // empty string
     assert(isAnagram("", ""));
     assert(!isAnagram("", "dog"));
@@ -78,10 +79,10 @@ void testFindEmpty()
 {
     string results[MAXRESULTS];
     assert(findEmpty(results)==0);
-    
+
     results[0] = "cat";
     assert(findEmpty(results)==1);
-    
+
     for (int i=0; i<MAXRESULTS; i++) {
         results[i] = "dog";
     }
@@ -93,10 +94,10 @@ void testIndexOfChar()
     assert(indexOfChar("hello", 'h', 0)==0);
     assert(indexOfChar("hello", 'l', 0)==2);
     assert(indexOfChar("hello", 'o', 0)==4);
-   
+
     // empty string
     assert(indexOfChar("", 'h', 0) == -1);
-    
+
     // not existing char
     assert(indexOfChar("hello", 'w', 0)==-1);
 }
