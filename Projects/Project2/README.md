@@ -1,5 +1,5 @@
 # Project 2
-<strong>A description of the design of your implementation and why you chose it. (A couple of sentences will probably suffice, perhaps with a picture of a typical List and an empty List. Is your list circular? Does it have a dummy node? What's in your nodes?)</strong>
+#### <strong>A description of the design of your implementation and why you chose it. (A couple of sentences will probably suffice, perhaps with a picture of a typical List and an empty List. Is your list circular? Does it have a dummy node? What's in your nodes?)</strong>
 
 OnlineDating is a doubly-linked list to fulfill the requirements on the project spec. However, I thought there was no need for each node to contain information about the previous node since the spec did not ask us to do a reversal (like reverseList in homework 1).
 
@@ -7,7 +7,8 @@ OnlineDating is a doubly-linked list to fulfill the requirements on the project 
 My doubly-linked list implementation was not a circular node. The initial and last nodes are pointed by a head pointer. The nodes have a value of type OnlineType, firstName and lastName in string, and pointers to previous node and next node. 
 
 
-<strong>A brief description of notable obstacles you overcame.</strong>
+
+#### <strong>A brief description of notable obstacles you overcame.</strong>
 
 The most difficult part for me was to implement makeMatch(). It seemed easy, but it turned out to be an issue because it had to do with adding in the front and back of a specific node. Also, before testing it out in the main function, I was not able to come up with edge cases, such as when the previous or next node of a current node is a null pointer. 
 
@@ -19,8 +20,7 @@ I also had a difficulty implementing mergeMatches(), since it had to deal with a
 
 
 
-<strong>Pseudocode for non-trivial algorithms</strong>
-
+#### <strong>Pseudocode for non-trivial algorithms</strong>
 
 ```
 bool OnlineDating::blockPreviousMatch(const std::string& firstName, const std::string& lastName)
@@ -46,6 +46,7 @@ bool OnlineDating::blockPreviousMatch(const std::string& firstName, const std::s
   return false 
 }
 ```
+<br></br>
 
 ```
 bool OnlineDating::makeMatch(const std::string& firstName, const std::string & lastName, const OnlineType& value)
@@ -81,6 +82,7 @@ bool OnlineDating::makeMatch(const std::string& firstName, const std::string & l
   return false // the case should not be here, but I added in case there is an edge case
 }
 ```
+<br></br>
 
 ```
 bool mergeMatches(const OnlineDating & odOne, const OnlineDating & odTwo, OnlineDating & odJoined)
@@ -106,6 +108,7 @@ bool mergeMatches(const OnlineDating & odOne, const OnlineDating & odTwo, Online
   return result
 }
 ```
+<br></br>
 
 ```
 void authenticateMatches (const std::string& fsearch, const std::string& lsearch, const OnlineDating& odOne, OnlineDating& odResult) 
