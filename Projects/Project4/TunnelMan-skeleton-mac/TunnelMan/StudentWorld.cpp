@@ -2,6 +2,7 @@
 #include "GraphObject.h"
 #include "Actor.h"
 #include <iostream>
+#include <cmath>
 #include <algorithm>
 #include <string>
 #include <vector>
@@ -46,38 +47,86 @@ int StudentWorld::init()
 
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-// Action functions
+// distance functions
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-bool StudentWorld::withinRadius(int x1, int y1, int x2, int y2, int radius)
+double StudentWorld::getDistance(int x1, int y1, int x2, int y2)
 {
-    if ((x1-x2)*(x1-x2) + (y1-y2)*(y1-y2) <= radius*radius)
-        return true;
-    else return false;
+    return sqrt((x1-x2)*(x1-x2)+(y1-y2)*(y1-y2));
 }
 
-bool StudentWorld::isThereBoulder(int x, int y, int radius)
+double StudentWorld::getDistanceFromTunnelMan(int x, int y)
+{
+    return getDistance(x, y, m_tunnelMan->getX(), m_tunnelMan->getY());
+}
+
+bool StudentWorld::isThereBoulderinDirection(int x, int y, GraphObject::Direction direction, Actor *actor)
 {
     vector<Actor*>::iterator it;
     for (it = m_actors.begin(); it != m_actors.end(); it++) {
-        if ((*it)->getID() == TID_BOULDER && withinRadius(x, y, (*it)->getX(), (*it)->getY(), radius))
-            return true;
+        if ((*it)->getID() == TID_BOULDER) {
+            double distance = getDistance(x, y, (*it)->getX(), (*it)->getY());
+            if (distance < 3.0)
+                return false;
+        }
+    }
+    return true;
+}
+
+// checking for earth should be made as another function
+bool StudentWorld::isThereEarthInDirection(int x, int y, GraphObject::Direction direction)
+{
+//    switch(direction){
+//        case GraphObject::right:
+//            if (x + 4 > 60) return false;
+//            break;
+//        case GraphObject::up:
+//            if (y - 4 > 60) return false;
+//            break;
+//        case GraphObject::left:
+//            if (x - 4 < 0) return false;
+//            break;
+//        case GraphObject::down:
+//            if (y - 4 > 60) return false;
+//            break;
+//        case GraphObject::none:
+//            return false;
+//    } return true;
+    
+    if (direction == GraphObject::right || direction == GraphObject::left) {
+        for (int i = y; i < y + 4; ++i) {
+            if (m_earth[x][i]) return false;
+        }
+    } else {
+        for (int i = x; i < x + 4; ++i) {
+            if (m_earth[i][y]) return false;
+        }
+    }
+    
+    return true;
+}
+
+
+bool StudentWorld::isThereEarthAtPoint(int x, int y)
+{
+    for (int i = x; i < x + SPRITE_WIDTH; ++i) {
+        for (int j = y; j < y + SPRITE_WIDTH; ++j) {
+            if (m_earth[i][j])
+                return true;
+        }
     }
     return false;
 }
-
-// isThereEarth
-// withinRadius....
-// withinRange....
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// action functions
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 void StudentWorld::digEarth(int x, int y)
 {
-    for (int i = x; i < x+4; i++) {
-        for (int j = y; j < y+4; j++) {
-            if (m_earth[i][j] != nullptr) {
-                delete m_earth[i][j];
-                m_earth[i][j] = nullptr;
-            }
+    // earth is 4 by 4, so iterate through x & y coordinates
+    for (int i = x; i < x + 4; i++) {
+        for (int j = y; j < y + 4; j++) {
+            m_earth[i][j] = nullptr;
         }
     }
     playSound(SOUND_DIG);
@@ -89,14 +138,16 @@ void StudentWorld::activateSonar(int x, int y, int radius)
     vector<Actor*>::iterator it;
     for (it = m_actors.begin(); it != m_actors.end(); it++)
     {
-        if ((*it)->getID() == TID_BARREL || (*it)->getID() == TID_GOLD)
-        {
+        if ((*it)->getID() == TID_BARREL || (*it)->getID() == TID_GOLD) {
             a = (*it)->getX();
             b = (*it)->getY();
-            if (withinRadius(x, y, a, b, radius))
+            
+            if (getDistance(x, y, a, b) < 12.0) // sonar range distance is 12.
                 (*it)->setVisible(true);
         }
     }
+    
+    playSound(SOUND_SONAR);
 }
 
 void StudentWorld::dropGold(Gold* gold)
