@@ -12,8 +12,11 @@ Actor::Actor(StudentWorld* world, int imageID, int startX, int startY, Direction
     setVisible(isDisplayed);
 }
 
-// destructor ...?
-Actor::~Actor() {};
+// destructor
+Actor::~Actor()
+{
+    m_world = nullptr;
+};
 
 bool Actor::isAlive()
 {
@@ -24,6 +27,13 @@ void Actor::setDead()
 {
     m_isAlive = false;
 }
+
+bool Actor::canBeAnnoyed() const
+{
+    return false;
+}
+
+void Actor::annoy(int damage) {};
 
 StudentWorld* Actor::getWorld()
 {
@@ -199,7 +209,7 @@ void TunnelMan::annoy(int damage)
 // Earth
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-Earth::Earth(int startX, int startY)å: Actor(nullptr, TID_EARTH, startX, startY, right, 0.25, 3) {}
+Earth::Earth(int startX, int startY): Actor(nullptr, TID_EARTH, startX, startY, right, 0.25, 3, true) {}
 
 void Earth::doSomething()
 {
@@ -226,27 +236,36 @@ bool Goodie::isPickedUp()
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-// Oil Barrel
+// Gold
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-OilBarrel::OilBarrel(StudentWorld* world, int startX, int startY): Goodie(world, TID_BARREL, startX, startY, false) {}
 
-void doSomething()
-{
-    if (!isAlive())
-        return;
-    
-// Otherwise, if the Barrel is not currently visible AND the TunnelMan is within a radius of 4.0 of it (<= 4.00 units away)
-    
-    if (!isVisible()) {// && distance <= 4.0
-        setVisible(true);
-        return;
-        
-//Otherwise, if the Barrel is within a radius of 3.0 (<= 3.00 units away) from the
-// TunnelMan, then the Barrel will activate,
-    } else {
-        setDead();
-        getWorld()->playSound(SOUND_FOUND_OIL);
-    }
-}
+Gold::Gold(StudentWorld * world,  int startX, int startY, bool isDisplayed, bool isDropped): Goodie(world, TID_GOLD, startX, startY, isDisplayed) {}
+
+
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// Oil Barrel
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//
+//OilBarrel::OilBarrel(StudentWorld* world, int startX, int startY): Goodie(world, TID_BARREL, startX, startY, false) {}
+//
+//void doSomething()
+//{
+//    if (!isAlive())
+//        return;
+//
+//// Otherwise, if the Barrel is not currently visible and the TunnelMan is within a radius of 4.0 of it (<= 4.00 units away)
+//
+//    if (!isVisible()) {// && distance <= 4.0
+//        setVisible(true);
+//        return;
+//
+////Otherwise, if the Barrel is within a radius of 3.0 (<= 3.00 units away) from the
+//// TunnelMan, then the Barrel will activate,
+//    } else {
+//        setDead();
+//        getWorld()->playSound(SOUND_FOUND_OIL);
+//    }
+//}
 

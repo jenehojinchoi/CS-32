@@ -64,7 +64,7 @@ int main() {
             {
                c = tolower(c);
             }
-            sub.erase(remove_if(sub.begin(), sub.end(), [](char c) { return !isalpha(c); } ), sub.end());
+            sub.erase(remove_if(sub.begin(), sub.end(), [](char c) { return (!isalpha(c) && c != '\''); } ), sub.end());
             if (sub == "") {
                 continue;
             }

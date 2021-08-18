@@ -40,7 +40,7 @@ class People : public Actor
 {
 public:
     People(StudentWorld* world, int imageID, int startX, int startY, Direction direction, int maxHitPoint);
-    bool canBeAnnoyed() const final;
+    bool canBeAnnoyed() const;
     int getHitPoint();
     void takeDamage(int damage);
     

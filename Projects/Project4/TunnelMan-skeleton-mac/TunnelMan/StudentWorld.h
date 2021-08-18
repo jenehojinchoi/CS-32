@@ -51,6 +51,8 @@ private:
     std::vector<Gold*> m_droppedGold;
     Earth* m_earth[64][64];
     TunnelMan* m_tunnelMan;
+    
+    void askPlayerAndObjectsToDoSomething();
 };
 
 #endif // STUDENTWORLD_H_

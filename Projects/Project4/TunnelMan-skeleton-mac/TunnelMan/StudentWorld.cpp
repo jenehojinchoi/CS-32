@@ -1,11 +1,11 @@
 #include "StudentWorld.h"
 #include "GraphObject.h"
-#include "Actor.h"
 #include <iostream>
 #include <cmath>
 #include <algorithm>
 #include <string>
 #include <vector>
+#include <iomanip>
 using namespace std;
 
 GameWorld* createStudentWorld(string assetDir)
@@ -45,6 +45,25 @@ int StudentWorld::init()
     return GWSTATUS_CONTINUE_GAME;
 }
 
+void StudentWorld::askPlayerAndObjectsToDoSomething()
+{
+    m_tunnelMan->doSomething();
+    for (std::vector<Actor*>::iterator it = m_actors.begin(); it != m_actors.end(); ++it)
+        (*it)->doSomething();
+}
+
+int StudentWorld::move()
+{
+    while(m_tunnelMan->isAlive())
+    {
+        askPlayerAndObjectsToDoSomething();
+        return GWSTATUS_CONTINUE_GAME;
+    }
+    
+    decLives();
+    playSound(SOUND_PLAYER_GIVE_UP);
+    return GWSTATUS_PLAYER_DIED;
+}
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // distance functions
