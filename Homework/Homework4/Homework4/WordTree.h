@@ -10,11 +10,14 @@
 
 #include <iostream>
 #include <string>
+#include <vector>
+#include <algorithm>
+#include <cctype>
 
 typedef std::string WordType;
 
 struct WordNode {
-    int count; //  added count
+    int count = 0; //  added count
     WordType m_data;
     WordNode *m_left;
     WordNode *m_right;
@@ -28,10 +31,7 @@ private:
     void createWordNode(WordType v, int count, WordNode*& temp);
     
     // copy constructor helper
-    void copy(WordNode *temp, WordNode* copySource);
-    
-    // add helper
-    void addToNonEmptyWordTree(WordType v, WordNode* curr);
+    void copy(WordNode *& temp, WordNode* copySource);
     
     // stream helper
     void streamHelper(std::ostream& output, WordNode* curr) const;
@@ -44,6 +44,19 @@ private:
     
     // totalWords helper
     int totalWordsOfWordTree(WordNode* curr) const;
+    
+    // makes words lowercase
+    void lower(WordType& v);
+    
+    // remove special characters at the end
+    void removeSpecialCharacters(WordType& v);
+    
+    // create a vector of parsed words
+    //std::vector<std::string> createParsedWordList(WordType &v);
+    //std::vector<std::string> findFirstandRest(WordType w);
+    bool findFirstandRest(WordType& w);
+    
+    void addHelper(WordType &v);
     
 public:
     // default constructor
