@@ -387,6 +387,7 @@ int makeDictionary_aux(istream &dictfile, string dict[], int i) {
     return i;
 }
 
+
 void revealOutcomes(const string results[], int numMatches) {
     revealOutcomes_aux(results, numMatches, 0);
 }

@@ -8,7 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		0752085526B11F6100BD4219 /* test.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0752085326B11F6100BD4219 /* test.cpp */; };
-		0773DDBA26AFF85A000FA1E3 /* anagram.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0773DDB926AFF85A000FA1E3 /* anagram.cpp */; };
+		0773DDBA26AFF85A000FA1E3 /* anagrams.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0773DDB926AFF85A000FA1E3 /* anagrams.cpp */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -25,10 +25,10 @@
 
 /* Begin PBXFileReference section */
 		0752085326B11F6100BD4219 /* test.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = test.cpp; sourceTree = "<group>"; };
-		0752085626B11F6D00BD4219 /* anagram.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = anagram.h; sourceTree = "<group>"; };
+		0752085626B11F6D00BD4219 /* anagrams.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = anagrams.h; sourceTree = "<group>"; };
 		0752085B26B122E200BD4219 /* TestAnagram.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = TestAnagram.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		0773DDB626AFF85A000FA1E3 /* Project3 */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = Project3; sourceTree = BUILT_PRODUCTS_DIR; };
-		0773DDB926AFF85A000FA1E3 /* anagram.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = anagram.cpp; sourceTree = "<group>"; };
+		0773DDB926AFF85A000FA1E3 /* anagrams.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = anagrams.cpp; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -69,8 +69,8 @@
 		0773DDB826AFF85A000FA1E3 /* Project3 */ = {
 			isa = PBXGroup;
 			children = (
-				0773DDB926AFF85A000FA1E3 /* anagram.cpp */,
-				0752085626B11F6D00BD4219 /* anagram.h */,
+				0773DDB926AFF85A000FA1E3 /* anagrams.cpp */,
+				0752085626B11F6D00BD4219 /* anagrams.h */,
 				0752085326B11F6100BD4219 /* test.cpp */,
 			);
 			path = Project3;
@@ -170,7 +170,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				0773DDBA26AFF85A000FA1E3 /* anagram.cpp in Sources */,
+				0773DDBA26AFF85A000FA1E3 /* anagrams.cpp in Sources */,
 				0752085526B11F6100BD4219 /* test.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
