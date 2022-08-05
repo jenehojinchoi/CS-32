@@ -1,4 +1,7 @@
 # ⭐️ Summer 2021 CS 32 
+### Note
+Use these as a guide at your own discretion. Be cautious, be smart, and good luck!
+
 ### About the course
 - CS 32 : Introduction to Computer Science II 
 - Language: C++
@@ -8,7 +11,6 @@
 ### Development Environment
 - Device - MacOS Big Sur 11.4
 - IDE - XCode
-(I personally think XCode is bad. I love VSCode.)
 
 ### Directory
 - [Documents](https://github.com/jenehojinchoi/summer-2021-cs32/tree/main/Documents)
